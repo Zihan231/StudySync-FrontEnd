@@ -17,7 +17,7 @@ const NavBar = () => {
 
   // TEMP ONLY: preview logged-in vs logged-out
   const [isLoggedIn] = useState(false);
-  const { user,logout } = useContext(AuthContext);
+  const { user, logout } = useContext(AuthContext);
 
   useEffect(() => {
     document.documentElement.setAttribute(
@@ -47,7 +47,7 @@ const NavBar = () => {
 
   // Log out
   const handleLogout = () => {
-    logout()
+    logout();
   }
   return (
     <header className="sticky top-0 z-50">
@@ -57,7 +57,7 @@ const NavBar = () => {
           <NavLink to="/" className="btn btn-ghost px-2">
             <div className="flex items-center gap-2">
               <div className="w-9 h-9 rounded-xl grid place-items-center font-bold text-primary-content bg-linear-to-br from-primary to-secondary shadow">
-                S
+                SM
               </div>
               <span className="text-lg md:text-xl font-extrabold tracking-tight">StudyMate</span>
             </div>
@@ -65,7 +65,7 @@ const NavBar = () => {
         </div>
 
         {/* Desktop links (the ONLY place Login/Register show when logged out) */}
-        <div className="hidden md:flex">
+        <div className="hidden md:flex items-center">
           <ul className="menu menu-horizontal gap-1">
             {navItems.map((item) => (
               <li key={item.to}>
@@ -74,34 +74,75 @@ const NavBar = () => {
                 </NavLink>
               </li>
             ))}
-            {user && (
-              <button
-                onClick={handleLogout}
-                className="btn btn-error btn-sm px-4 font-medium text-base-100 
-               rounded-md shadow-sm hover:shadow transition-all duration-150
-               hover:brightness-105 focus:outline-none focus-visible:ring-2 
-               focus-visible:ring-error focus-visible:ring-offset-2"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.6}
-                  stroke="currentColor"
-                  className="w-4 h-4 mr-1.5"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6A2.25 2.25 0 005.25 5.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9"
-                  />
-                </svg>
-                Log&nbsp;Out
-              </button>
-            )}
-
           </ul>
+          {/* Avatar dropdown only when logged in */}
+          {user && (
+            <div className="dropdown dropdown-end mr-2">
+              {/* trigger */}
+              <button
+                tabIndex={0}
+                className="btn btn-ghost btn-circle avatar"
+                aria-haspopup="menu"
+                aria-expanded="false"
+              >
+                <div className="w-10 rounded-full ring ring-primary/30 ring-offset-2 ring-offset-base-100">
+                  <img
+                    alt="User avatar"
+                    src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                  />
+                </div>
+              </button>
+
+              {/* menu */}
+              <ul
+                tabIndex={0}
+                role="menu"
+                className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[60] mt-3 w-56 p-2 
+                 shadow-xl border border-base-300/60"
+              >
+                {/* Profile */}
+                <li role="none">
+                  <NavLink
+                    role="menuitem"
+                    to="/profile"
+                    className="rounded-md px-2 text-sm py-2 hover:bg-base-300/60 transition font-bold"
+                  >
+                    Profile
+                  </NavLink>
+                </li>
+
+                <div className="divider my-2" />
+
+                {/* Log out (menu style, not big button) */}
+                <li role="none">
+                  <button
+                    role="menuitem"
+                    onClick={handleLogout}
+                    className="rounded-md px-2 py-2 text-error font-bold hover:bg-error/10 hover:text-error 
+                     transition flex items-center gap-2"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-4 h-4"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6A2.25 2.25 0 005.25 5.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9"
+                      />
+                    </svg>
+                    Log Out
+                  </button>
+                </li>
+              </ul>
+            </div>
+          )}
         </div>
+        
 
         {/* Right: Theme toggle + Avatar (avatar only when logged in) */}
         <div className="flex-none items-center gap-1">
@@ -128,26 +169,8 @@ const NavBar = () => {
             )}
           </button>
 
-          {/* Avatar dropdown only when logged in */}
-          {isLoggedIn && (
-            <div className="dropdown dropdown-end">
-              <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
-                <div className="w-10 rounded-full ring ring-primary/30 ring-offset-2 ring-offset-base-100">
-                  <img
-                    alt="User avatar"
-                    src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-                  />
-                </div>
-              </div>
-              <ul
-                tabIndex={-1}
-                className="menu menu-sm dropdown-content bg-base-100 rounded-box z-10 mt-3 w-52 p-2 shadow"
-              >
-                <li><NavLink to="/profile">Profile</NavLink></li>
-                <li><button>Logout</button></li>
-              </ul>
-            </div>
-          )}
+          
+
 
           {/* Mobile menu (shows same list; desktop links are hidden on md-) */}
           <div className="md:hidden dropdown dropdown-end">
@@ -170,12 +193,12 @@ const NavBar = () => {
               ))}
 
               {/* Extra mobile-only actions when logged in */}
-              {isLoggedIn && (
+              {user && (
                 <>
                   <div className="divider my-2" />
-                  <li><NavLink to="/profile">Profile</NavLink></li>
+                  <li className="font-bold"><NavLink to="/profile">Profile</NavLink></li>
                   <li>
-                    <button className="px-3 py-2 rounded-lg text-left text-error hover:bg-error/10">
+                    <button className="px-3 py-2 rounded-lg text-left text-error hover:bg-error/10 font-bold">
                       Logout
                     </button>
                   </li>
