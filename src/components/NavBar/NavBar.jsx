@@ -2,83 +2,29 @@ import React, { use, useEffect, useMemo, useState } from "react";
 import { NavLink } from "react-router";
 import ThemeContext from "../../contexts/Theme/themeContext";
 
-/* ---------- Shared styles ---------- */
+/** Active link styles */
 const linkClasses = ({ isActive }) =>
   [
-    "relative px-3 py-2 rounded-lg text-sm font-medium transition",
-    "hover:bg-base-200/70 hover:text-base-content",
-    // active pill + underline indicator
-    isActive
-      ? "bg-base-200 text-base-content after:absolute after:left-3 after:right-3 after:-bottom-[3px] after:h-[2px] after:bg-primary after:rounded-full"
-      : "text-base-content/70",
+    "px-3 py-2 rounded-lg text-sm font-medium transition",
+    "hover:bg-base-200 hover:text-base-content",
+    isActive ? "bg-base-200 text-base-content" : "text-base-content/70",
   ].join(" ");
 
-/* ---------- Theme Toggle Button ---------- */
-const ThemeToggle = ({ theme, onToggle }) => {
-  const isDark = theme === "studymate-dark";
-  return (
-    <button
-      aria-label="Toggle theme"
-      className="btn btn-ghost btn-sm gap-2"
-      onClick={onToggle}
-      title={isDark ? "Switch to Light" : "Switch to Dark"}
-    >
-      {/* Sun / Moon icons */}
-      <span className="swap swap-rotate">
-        <input type="checkbox" readOnly checked={isDark} />
-        {/* Sun */}
-        <svg
-          className="swap-off"
-          xmlns="http://www.w3.org/2000/svg"
-          width="18" height="18" viewBox="0 0 24 24" fill="none"
-        >
-          <path d="M12 4V2M12 22v-2M4 12H2M22 12h-2M5 5L3.6 3.6M20.4 20.4L19 19M5 19l-1.4 1.4M20.4 3.6L19 5"
-            stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-          <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="2"/>
-        </svg>
-        {/* Moon */}
-        <svg
-          className="swap-on"
-          xmlns="http://www.w3.org/2000/svg"
-          width="18" height="18" viewBox="0 0 24 24" fill="none"
-        >
-          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"
-            stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-      </span>
-      <span className="hidden sm:inline text-xs">
-        {isDark ? "Dark" : "Light"}
-      </span>
-    </button>
-  );
-};
-
 const NavBar = () => {
-    const { darkMode } = use(ThemeContext);
-    console.log(darkMode);
-  /* ---------------- Fake auth toggle (UI preview only) ---------------- */
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // theme from your context
+  const { darkMode, setDarkMode } = use(ThemeContext);
 
-  /* ---------------- Theme state & persistence ---------------- */
-  const getInitialTheme = () => {
-    // localStorage > system preference > fallback
-    const saved = localStorage.getItem("studymate-theme");
-    if (saved === "studymate" || saved === "studymate-dark") return saved;
-    const prefersDark = window.matchMedia?.("(prefers-color-scheme: dark)").matches;
-    return prefersDark ? "studymate-dark" : "studymate";
-  };
-
-  const [theme, setTheme] = useState(getInitialTheme);
+  // TEMP ONLY: preview logged-in vs logged-out
+  const [isLoggedIn] = useState(false);
 
   useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
-    localStorage.setItem("studymate-theme", theme);
-  }, [theme]);
+    document.documentElement.setAttribute(
+      "data-theme",
+      darkMode ? "studymate-dark" : "studymate"
+    );
+  }, [darkMode]);
 
-  const toggleTheme = () =>
-    setTheme((t) => (t === "studymate-dark" ? "studymate" : "studymate-dark"));
-
-  /* ---------------- Nav items ---------------- */
+  // Build nav items (Login/Register appear only here when logged out)
   const navItems = useMemo(
     () =>
       isLoggedIn
@@ -97,35 +43,23 @@ const NavBar = () => {
     [isLoggedIn]
   );
 
-  /* ---------------- CTA decision ---------------- */
-  const cta = isLoggedIn
-    ? { to: "/create-partner", label: "Create Profile", className: "btn btn-primary" }
-    : { to: "/register", label: "Get Started", className: "btn btn-primary" };
-
   return (
-    <header className="sticky top-0 z-50 backdrop-blur bg-base-100/80 border-b border-base-300">
-      <nav className="navbar max-w-7xl mx-auto px-3 md:px-4">
+    <header className="sticky top-0 z-50">
+      <div className="navbar bg-base-100/90 backdrop-blur shadow-sm border-b border-base-300">
         {/* Left: Brand */}
         <div className="flex-1">
-          <NavLink to="/" className="flex items-center gap-2 group">
-            {/* Gradient logo badge */}
-            <div className="w-9 h-9 rounded-xl grid place-items-center font-bold text-primary-content
-                            bg-gradient-to-br from-primary to-secondary shadow-sm">
-              S
-            </div>
-            <div className="flex flex-col leading-tight">
-              <span className="text-lg md:text-xl font-extrabold tracking-tight">
-                StudyMate
-              </span>
-              <span className="text-[10px] md:text-[11px] text-base-content/60 -mt-0.5">
-                Find partners. Learn better.
-              </span>
+          <NavLink to="/" className="btn btn-ghost px-2">
+            <div className="flex items-center gap-2">
+              <div className="w-9 h-9 rounded-xl grid place-items-center font-bold text-primary-content bg-gradient-to-br from-primary to-secondary shadow">
+                S
+              </div>
+              <span className="text-lg md:text-xl font-extrabold tracking-tight">StudyMate</span>
             </div>
           </NavLink>
         </div>
 
-        {/* Center: Desktop Links */}
-        <div className="hidden lg:flex">
+        {/* Desktop links (the ONLY place Login/Register show when logged out) */}
+        <div className="hidden md:flex">
           <ul className="menu menu-horizontal gap-1">
             {navItems.map((item) => (
               <li key={item.to}>
@@ -137,70 +71,64 @@ const NavBar = () => {
           </ul>
         </div>
 
-        {/* Right: Controls */}
-        <div className="flex-none items-center gap-2 hidden sm:flex">
+        {/* Right: Theme toggle + Avatar (avatar only when logged in) */}
+        <div className="flex-none items-center gap-1">
           {/* Theme toggle */}
-          <ThemeToggle theme={theme} onToggle={toggleTheme} />
-
-          {/* Fake auth switcher (dev only) */}
           <button
-            className="btn btn-ghost btn-sm"
-            onClick={() => setIsLoggedIn((v) => !v)}
-            title="Dev Preview: toggle login UI"
+            aria-label="Toggle theme"
+            className="btn btn-ghost btn-circle"
+            onClick={() => setDarkMode(!darkMode)}
+            title={darkMode ? "Light mode" : "Dark mode"}
           >
-            {isLoggedIn ? "Preview: Logged-in" : "Preview: Logged-out"}
+            {darkMode ? (
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5"
+                   viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
+                      d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+              </svg>
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5"
+                   viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <circle cx="12" cy="12" r="4" strokeWidth="2" />
+                <path strokeLinecap="round" strokeWidth="2"
+                      d="M12 2v2M12 20v2M2 12h2M20 12h2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/>
+              </svg>
+            )}
           </button>
 
-          {/* Auth area */}
-          {isLoggedIn ? (
+          {/* Avatar dropdown only when logged in */}
+          {isLoggedIn && (
             <div className="dropdown dropdown-end">
-              <div tabIndex={0} role="button" className="btn btn-ghost px-2">
-                <div className="avatar">
-                  <div className="w-9 rounded-full ring ring-primary/30 ring-offset-2 ring-offset-base-100">
-                    <img src="https://i.ibb.co/jDcv7rF/profile10.jpg" alt="User" />
-                  </div>
+              <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
+                <div className="w-10 rounded-full ring ring-primary/30 ring-offset-2 ring-offset-base-100">
+                  <img
+                    alt="User avatar"
+                    src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                  />
                 </div>
-                <span className="ml-2 hidden md:inline text-sm font-medium">
-                  Tanvir Rahman
-                </span>
-                <svg className="ml-1 hidden md:inline-block" width="16" height="16" viewBox="0 0 24 24" fill="none">
-                  <path d="M7 10l5 5 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
               </div>
-              <ul tabIndex={0} className="menu dropdown-content z-[1] mt-3 p-2 shadow bg-base-100 rounded-xl w-56">
-                <li>
-                  <NavLink to="/profile" className={linkClasses}>Profile</NavLink>
-                </li>
-                <li>
-                  <button onClick={() => setIsLoggedIn(false)} className="px-3 py-2 rounded-lg text-left text-error hover:bg-error/10">
-                    Logout
-                  </button>
-                </li>
+              <ul
+                tabIndex={-1}
+                className="menu menu-sm dropdown-content bg-base-100 rounded-box z-10 mt-3 w-52 p-2 shadow"
+              >
+                <li><NavLink to="/profile">Profile</NavLink></li>
+                <li><button>Logout</button></li>
               </ul>
             </div>
-          ) : (
-            <>
-              <NavLink to="/login" className="btn btn-ghost btn-sm">
-                Login
-              </NavLink>
-              <NavLink to={cta.to} className={`${cta.className} btn-sm`}>
-                {cta.label}
-              </NavLink>
-            </>
           )}
-        </div>
 
-        {/* Mobile: Right side (hamburger + quick actions) */}
-        <div className="sm:hidden flex items-center gap-1">
-          <ThemeToggle theme={theme} onToggle={toggleTheme} />
-
-          <div className="dropdown dropdown-end">
+          {/* Mobile menu (shows same list; desktop links are hidden on md-) */}
+          <div className="md:hidden dropdown dropdown-end">
             <div tabIndex={0} role="button" className="btn btn-ghost btn-square">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                <path d="M4 6h16M4 12h16M4 18h16"
+                      stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
               </svg>
             </div>
-            <ul tabIndex={0} className="menu dropdown-content z-[1] mt-3 p-2 shadow bg-base-100 rounded-xl w-72">
+            <ul
+              tabIndex={0}
+              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-10 mt-3 w-64 p-2 shadow"
+            >
               {navItems.map((item) => (
                 <li key={item.to}>
                   <NavLink to={item.to} className={linkClasses}>
@@ -209,49 +137,22 @@ const NavBar = () => {
                 </li>
               ))}
 
-              <div className="divider my-2" />
-              {!isLoggedIn ? (
+              {/* Extra mobile-only actions when logged in */}
+              {isLoggedIn && (
                 <>
+                  <div className="divider my-2" />
+                  <li><NavLink to="/profile">Profile</NavLink></li>
                   <li>
-                    <NavLink to="/login" className="btn btn-ghost justify-start">
-                      Login
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink to={cta.to} className={`${cta.className} justify-start`}>
-                      {cta.label}
-                    </NavLink>
-                  </li>
-                </>
-              ) : (
-                <>
-                  <li>
-                    <NavLink to="/profile" className={linkClasses}>
-                      Profile
-                    </NavLink>
-                  </li>
-                  <li>
-                    <button onClick={() => setIsLoggedIn(false)} className="px-3 py-2 rounded-lg text-left text-error hover:bg-error/10">
+                    <button className="px-3 py-2 rounded-lg text-left text-error hover:bg-error/10">
                       Logout
                     </button>
                   </li>
                 </>
               )}
-
-              {/* Dev toggle for mobile preview */}
-              <div className="divider my-2" />
-              <li>
-                <button className="btn btn-ghost justify-start" onClick={() => setIsLoggedIn((v) => !v)}>
-                  {isLoggedIn ? "Preview: Logged-in" : "Preview: Logged-out"}
-                </button>
-              </li>
             </ul>
           </div>
         </div>
-      </nav>
-
-      {/* Subtle bottom border glow for a premium feel */}
-      <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+      </div>
     </header>
   );
 };
