@@ -1,4 +1,4 @@
-import React, { use } from "react";
+import React, { use, useState } from "react";
 import { NavLink } from "react-router";
 import AuthContext from "../../contexts/Auth/AuthContext/AuthContext";
 
@@ -9,18 +9,27 @@ import AuthContext from "../../contexts/Auth/AuthContext/AuthContext";
  * - isLoading: boolean  // disables buttons & shows loading states
  */
 const Login = () => {
-    const { user, isLoading, signInWithEmailPass } = use(AuthContext);
+      const [submitError, setSubmitError] = useState("");
+    
+    const { user, isLoading, signInWithEmailPass,signInWithGoogle,SetUser } = use(AuthContext);
     console.log(user);
     const handleSubmit = (e) => {
         e.preventDefault();
-        
+
     };
 
     // google Login
     const onGoogleLogin = () => {
-        
+        setSubmitError("");
+        signInWithGoogle()
+            .then((result) => {
+                SetUser?.(result.user);
+                // navigate(...) if needed
+            })
+            .catch((err) => {
+                setSubmitError(err?.message || "Google sign-in failed.");
+            });
     }
-
     return (
         <main className="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4 py-10 bg-base-100">
             <div className="w-full max-w-md">
