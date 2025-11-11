@@ -1,25 +1,43 @@
-import React, { useContext, useMemo } from "react";
+import React, { useContext, useMemo, useState } from "react";
 import AuthContext from "../../contexts/Auth/AuthContext/AuthContext";
+import useAxiosSecure from "../../hooks/AxiosSecure/useAxiosSecure";
+import Swal from "sweetalert2";
 
-/**
- * Props (all optional for now; you wire the logic later):
- * - userEmail?: string                     // current logged-in user email (read-only)
- * - isLoading?: boolean                    // disable while creating
- * - onCreateProfile?: (data) => void       // called with all form fields
- * - onUploadImage?: (file: File) => Promise<string> | void  // should return uploaded URL (optional)
- */
+
 const CreatePartner = () => {
     const { user, isLoading } = useContext(AuthContext);
+    const [error, setError] = useState("");
+
+    // Axios Instance
+    const axiosSecure = useAxiosSecure();
+
     const subjects = useMemo(
         () => ["English", "Mathematics", "Physics", "Programming", "Chemistry", "Biology", "Economics"],
         []
     );
+    // Validation function
+    const validateForm = (data) => {
+        if (!data.name) return "Name is required.";
+        if (!data.profileImage) return "Photo URL is required.";
+        if (!data.subject) return "Subject is required.";
+        if (!data.studyMode) return "Please select a study mode.";
+        if (!data.availabilityTime) return "Availability time is required.";
+        if (!data.location) return "Location is required.";
+        if (!data.experienceLevel) return "Please select an experience level.";
+        if (isNaN(data.rating) || data.rating < 0 || data.rating > 5)
+            return "Rating must be a number between 0 and 5.";
+        if (!data.email) return "Email is required.";
+        return "";
+    };
 
 
+    // Handle Submit
     const handleSubmit = (e) => {
         e.preventDefault();
-        const fd = new FormData(e.currentTarget);
-        const data = {
+        setError(""); // clear old error
+        const form = e.currentTarget;
+        const fd = new FormData(form);
+        const dataInput = {
             name: (fd.get("name") || "").toString().trim(),
             subject: (fd.get("subject") || "").toString().trim(),
             studyMode: (fd.get("studyMode") || "").toString(),
@@ -29,10 +47,33 @@ const CreatePartner = () => {
             rating: Number(fd.get("rating") || 0),
             partnerCount: 0,
             email: (fd.get("email") || "").toString(),
+            profileImage: (fd.get("profileImage") || "").toString()
         };
-        console.log(data);
-    };
+        console.log(fd);
+        const errorMsg = validateForm(dataInput);
+        if (errorMsg) {
+            setError(errorMsg);
+            return;
+        }
 
+        console.log("✅ Valid Data:", dataInput);
+        // you can now call your API or pass it to parent
+        try {
+            axiosSecure.post("/create/partner", dataInput).then(dt => {
+                if (dt.data.result.insertedId) {
+                    Swal.fire({
+                        title: "Profile Created Successfully !",
+                        icon: "success",
+                        draggable: true
+                    });
+                    form.reset();
+                }
+                // console.log(dt.data);
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    };
     return (
         <main className="min-h-[calc(100vh-4rem)] bg-base-100 py-10 px-4 flex justify-center">
             <div className="w-full max-w-4xl">
@@ -59,7 +100,7 @@ const CreatePartner = () => {
                                         type="text"
                                         placeholder="Full name"
                                         className="input input-bordered w-full"
-                                        required
+
                                     />
                                 </label>
 
@@ -84,7 +125,7 @@ const CreatePartner = () => {
                                         </span>
                                     </div>
                                     <input
-                                        name="profileimage"
+                                        name="profileImage"
                                         type="url"
                                         placeholder="https://your-photo.jpg"
                                         className="input input-bordered w-full"
@@ -99,7 +140,7 @@ const CreatePartner = () => {
                                         list="subject-list"
                                         placeholder="e.g., English, Math, Programming"
                                         className="input input-bordered w-full"
-                                        required
+
                                     />
                                     <datalist id="subject-list">
                                         {subjects.map((s) => (
@@ -111,7 +152,7 @@ const CreatePartner = () => {
                                 {/* Study Mode */}
                                 <label className="form-control">
                                     <div className="label"><span className="label-text">Study Mode</span></div>
-                                    <select name="studyMode" className="select select-bordered w-full" required>
+                                    <select name="studyMode" className="select select-bordered w-full" >
                                         <option value="" disabled selected>
                                             Select mode
                                         </option>
@@ -128,7 +169,7 @@ const CreatePartner = () => {
                                         type="text"
                                         placeholder='e.g., "Evening 6–9 PM"'
                                         className="input input-bordered w-full"
-                                        required
+
                                     />
                                 </label>
 
@@ -140,14 +181,14 @@ const CreatePartner = () => {
                                         type="text"
                                         placeholder="City, area, or preferred location"
                                         className="input input-bordered w-full"
-                                        required
+
                                     />
                                 </label>
 
                                 {/* Experience Level */}
                                 <label className="form-control">
                                     <div className="label"><span className="label-text">Experience Level</span></div>
-                                    <select name="experienceLevel" className="select select-bordered w-full" required>
+                                    <select name="experienceLevel" className="select select-bordered w-full" >
                                         <option value="" disabled selected>
                                             Select level
                                         </option>
@@ -169,7 +210,7 @@ const CreatePartner = () => {
                                         placeholder="0–5"
                                         className="input input-bordered w-full"
                                         defaultValue={0}
-                                        required
+
                                     />
                                 </label>
                             </div>
@@ -194,6 +235,25 @@ const CreatePartner = () => {
                                     Create Profile
                                 </button>
                             </div>
+                            {error && (
+                                <div className="alert alert-error shadow-sm mt-4">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        className="stroke-current shrink-0 h-6 w-6"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth="2"
+                                            d="M12 9v2m0 4h.01M5.293 17.707a1 1 0 001.414 0L12 12.414l5.293 5.293a1 1 0 001.414-1.414l-6-6a1 1 0 00-1.414 0l-6 6a1 1 0 000 1.414z"
+                                        />
+                                    </svg>
+                                    <span>{error}</span>
+                                </div>
+                            )}
+
                         </form>
                     </div>
                 </div>
