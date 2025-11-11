@@ -42,9 +42,7 @@ const Banner = () => {
     };
   }, [axiosInstance]);
 
-  // Ensure Swiper can autoplay/loop:
-  // - If only one slide, clone it so there are at least two.
-  // - If zero, keep empty.
+  
   const safeSlides = useMemo(() => {
     if (slides.length >= 2) return slides;
     if (slides.length === 1) {
