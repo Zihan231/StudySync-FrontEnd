@@ -105,7 +105,7 @@ const FindPartners = () => {
                                     e.preventDefault();
                                     onSearch(term.trim());
                                 }}
-                                className="join w-full sm:w-auto"
+                                className="join w-full sm:w-auto gap-2"
                             >
                                 <input
                                     type="text"
