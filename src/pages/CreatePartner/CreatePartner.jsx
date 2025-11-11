@@ -32,7 +32,7 @@ const CreatePartner = () => {
 
 
     // Handle Submit
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setError(""); // clear old error
         const form = e.currentTarget;
@@ -49,7 +49,6 @@ const CreatePartner = () => {
             email: (fd.get("email") || "").toString(),
             profileImage: (fd.get("profileImage") || "").toString()
         };
-        console.log(fd);
         const errorMsg = validateForm(dataInput);
         if (errorMsg) {
             setError(errorMsg);
@@ -58,21 +57,26 @@ const CreatePartner = () => {
 
         console.log("✅ Valid Data:", dataInput);
         // you can now call your API or pass it to parent
-        try {
-            axiosSecure.post("/create/partner", dataInput).then(dt => {
-                if (dt.data.result.insertedId) {
-                    Swal.fire({
-                        title: "Profile Created Successfully !",
-                        icon: "success",
-                        draggable: true
-                    });
-                    form.reset();
-                }
-                // console.log(dt.data);
-            })
-        } catch (error) {
-            console.log(error)
+        const res = await axiosSecure.post("/create/partner", dataInput);
+        const payload = res?.data.result;
+        console.log(payload);
+
+        if (payload?.acknowledged && payload?.insertedId) {
+            await Swal.fire({
+                title: "Profile Created Successfully!",
+                text: "Your study profile has been saved to MongoDB.",
+                icon: "success",
+                confirmButtonText: "OK",
+            });
+            form.reset();
+        } else {
+            await Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Something went wrong while saving to MongoDB.",
+            });
         }
+
     };
     return (
         <main className="min-h-[calc(100vh-4rem)] bg-base-100 py-10 px-4 flex justify-center">
