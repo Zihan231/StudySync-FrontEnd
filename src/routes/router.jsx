@@ -5,6 +5,7 @@ import Register from "../components/Register/Register";
 import UserProfile from "../components/UserProfile/UserProfile";
 import Home from "../pages/Home/Home";
 import NotFound from "../pages/NotFound/NotFound";
+import CreatePartner from "../pages/CreatePartner/CreatePartner";
 
 const router = createBrowserRouter([
     {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
             {
                 path: '/profile',
                 element: <UserProfile></UserProfile>
+            },
+            {
+                path: '/create-partner',
+                Component: CreatePartner
             }
         ]
     },

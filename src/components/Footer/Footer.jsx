@@ -13,7 +13,7 @@ const Footer = () => {
                     {/* Logo + name */}
                     <div>
                         <div className="flex items-center gap-3 mb-3">
-                            <div className="w-10 h-10 rounded-2xl grid place-items-center text-primary-content bg-gradient-to-br from-primary to-secondary shadow">
+                            <div className="w-10 h-10 rounded-2xl grid place-items-center text-primary-content bg-linear-to-br from-primary to-secondary shadow">
                                 SM
                             </div>
                             <h2 className="text-xl font-extrabold">StudyMate</h2>

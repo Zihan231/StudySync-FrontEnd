@@ -33,9 +33,6 @@ const Testimonials = () => {
     <main className="min-h-[calc(100vh-4rem)] bg-base-100 py-16 px-4 flex flex-col items-center">
       {/* Header */}
       <div className="text-center max-w-2xl mb-10">
-        <div className="mx-auto mb-4 w-12 h-12 rounded-2xl grid place-items-center text-primary-content bg-gradient-to-br from-primary to-secondary shadow">
-          S
-        </div>
         <h1 className="text-3xl md:text-4xl font-extrabold mb-2">
           What Students Say
         </h1>
