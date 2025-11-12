@@ -135,7 +135,7 @@ const Banner = () => {
                 />
 
                 {/* Lighter gradient on mobile so image stays visible */}
-                <div className="absolute inset-0 bg-gradient-to-t from-base-100/50 via-base-100/20 to-transparent md:from-base-100/80 md:via-base-100/40" />
+                <div className="absolute inset-0 bg-linear-to-t from-base-100/50 via-base-100/20 to-transparent md:from-base-100/80 md:via-base-100/40" />
 
                 {/* DESKTOP/TABLET OVERLAY CARD (hidden on mobile) */}
                 <div className="hidden md:flex absolute inset-0 p-6 lg:p-10 items-end">

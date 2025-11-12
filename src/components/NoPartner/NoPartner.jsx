@@ -11,7 +11,7 @@ const NoPartner = ({
     <section className="flex flex-col items-center justify-center text-center min-h-[60vh] px-4">
       {/* Icon bubble */}
       <div className="mb-6 flex items-center justify-center">
-        <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center shadow-sm">
+        <div className="w-20 h-20 rounded-2xl bg-linear-to-br from-primary/20 to-secondary/20 flex items-center justify-center shadow-sm">
           <svg
             width="36"
             height="36"
