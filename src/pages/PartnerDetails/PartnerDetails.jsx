@@ -37,7 +37,7 @@ const PartnerDetails = () => {
                 setPartner(result);
             } catch (error) {
                 // This will trigger on any non-2xx response or network error
-                // console.error(error);
+                console.error(error);
                 setErr("No Partner Found !!!");
             } finally {
                 setLoading(false);
@@ -46,49 +46,78 @@ const PartnerDetails = () => {
         fetchData();
 
     }, [axiosInstance, id])
-    // console.log(partner?.email);
-    // console.log(user?.email);
+
     const onSendRequest = async (e) => {
         e.preventDefault();
+
+        if (!partner?._id) {
+            await Swal.fire({
+                icon: "error",
+                title: "No partner selected",
+                text: "Open a partner profile first.",
+            });
+            return;
+        }
+
         const {
             _id, subject, studyMode, rating, profileimage, partnerCount,
-            name, location, experienceLevel, email, bio, availabilityTime
+            name, location, experienceLevel, bio, availabilityTime
         } = partner;
+
         const InputData = {
-            partner_id: _id, subject, studyMode, rating, profileimage, partnerCount,
+            partner_id: _id,
+            subject, studyMode, rating, profileimage, partnerCount,
             name, location, experienceLevel, bio, availabilityTime,
-            email: user?.email
+            email: user?.email, // requester’s email
         };
-        console.log(InputData);
+
         try {
+            // 1) Create connection
             const res = await axiosSecure.post("/partner/connect", InputData);
             const payload = res?.data;
+
             if (payload?.acknowledged && payload?.insertedId) {
+                // 2) Increment on server
+                const res2 = await axiosInstance.patch(`/Inc/${_id}`);
+                const payload2 = res2?.data;
+
+                const okInc =
+                    payload2?.acknowledged === true &&
+                    payload2?.matchedCount === 1 &&
+                    payload2?.modifiedCount === 1;
+
+                // 3) Update local UI count (functional update)
+                if (okInc) {
+                    setPartner(prev =>
+                        prev ? { ...prev, partnerCount: (prev.partnerCount ?? 0) + 1 } : prev
+                    );
+                }
+
                 await Swal.fire({
-                    title: "Partner Added Successfully !!",
-                    text: "Your study profile has been saved to MongoDB.",
-                    icon: "success",
+                    title: okInc ? "Partner Added Successfully !!" : "Partner Added",
+                    text: okInc
+                        ? "You can see your partners on My Connection Page"
+                        : "Saved successfully, but partnerCount was not updated.",
+                    icon: okInc ? "success" : "warning",
                     confirmButtonText: "OK",
                 });
             } else {
                 await Swal.fire({
                     icon: "error",
                     title: "You already added this user !!!",
-                    text: "Find another partner !!! ",
+                    text: "Find another partner !!!",
                 });
             }
         } catch (err) {
-            console.log(err);
+            console.error(err);
+            await Swal.fire({
+                icon: "error",
+                title: "Request failed",
+                text: err?.response?.data?.message || "Please try again later.",
+            });
         }
+    };
 
-
-        // console.log(inputData);
-        // try {
-        //     const res = await axiosSecure.post("/partner/connect", )
-        // }
-
-        // console.log("clicked")
-    }
     // Helpers
     const safeImage = (url) =>
         !url || url.includes("create-partner")
@@ -195,8 +224,19 @@ const PartnerDetails = () => {
                                         : "—"}
                                 </span>
                                 <span className="opacity-40">•</span>
-                                <span className="text-xs text-base-content/70">
-                                    {partner.partnerCount} connections
+                                <span
+                                    className="
+                                                inline-flex items-center gap-2
+                                                px-3 py-1.5 rounded-full
+                                                text-sm font-medium
+                                                bg-base-200 border border-base-300
+                                                text-base-content/80
+                                            "
+                                >
+                                    Partner Count:
+                                    <span className="text-primary font-bold">
+                                        {partner.partnerCount}
+                                    </span>
                                 </span>
                             </div>
                         </div>
