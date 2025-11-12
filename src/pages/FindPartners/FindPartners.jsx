@@ -21,6 +21,7 @@ const FindPartners = () => {
         }
         fetchData();
     }, [axios]);
+    console.log(data);
 
     // --- UI state ---
     const [term, setTerm] = useState("");

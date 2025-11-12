@@ -203,18 +203,13 @@ const PartnerDetails = () => {
                                 <p className="mt-1 text-sm leading-relaxed text-base-content/80">
                                     {partner.bio || "No bio provided yet."}
                                 </p>
-
                                 <div className="mt-6 flex flex-wrap gap-2">
-                                    <NavLink to="/partners" className="btn btn-ghost">
+                                    <NavLink to="/partners" className="btn btn-primary">
                                         Back to List
                                     </NavLink>
                                 </div>
                             </div>
                         </div>
-
-                        <p className="mt-3 text-xs text-base-content/60">
-                            Tip: After a successful request, you can reveal chat/contact options here.
-                        </p>
                     </div>
                 </div>
             </div>
