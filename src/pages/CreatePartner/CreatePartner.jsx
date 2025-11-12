@@ -19,6 +19,7 @@ const CreatePartner = () => {
     const validateForm = (data) => {
         if (!data.name) return "Name is required.";
         if (!data.profileimage) return "Photo URL is required.";
+        if (!data.bio) return "Bio details is required.";
         if (!data.subject) return "Subject is required.";
         if (!data.studyMode) return "Please select a study mode.";
         if (!data.availabilityTime) return "Availability time is required.";
@@ -47,7 +48,9 @@ const CreatePartner = () => {
             rating: Number(fd.get("rating") || 0),
             partnerCount: 0,
             email: (fd.get("email") || "").toString(),
-            profileimage: (fd.get("profileImage") || "").toString()
+            profileimage: (fd.get("profileImage") || "").toString(),
+            bio: (fd.get("bio") || "").toString(),
+            
         };
         const errorMsg = validateForm(dataInput);
         if (errorMsg) {
@@ -132,6 +135,20 @@ const CreatePartner = () => {
                                         className="input input-bordered w-full"
                                     />
                                 </label>
+                                {/* Bio */}
+                                <label className="form-control md:col-span-2">
+                                    <div className="label">
+                                        <span className="label-text">Write about the Partner</span>
+                                    </div>
+                                    <textarea
+                                        className="textarea textarea-bordered w-full"
+                                        name="bio"
+                                        id="bio"
+                                        rows="5"
+                                        placeholder="Write a few lines about the partner..."
+                                    ></textarea>
+                                </label>
+
 
                                 {/* Subject */}
                                 <label className="form-control">
