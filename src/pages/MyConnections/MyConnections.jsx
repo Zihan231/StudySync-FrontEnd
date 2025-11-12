@@ -236,7 +236,12 @@ const MyConnections = ({ loadConnections, onDelete, onUpdate }) => {
 
                                             {/* Subject */}
                                             <td>
-                                                <span className="badge badge-ghost">{r.subject}</span>
+                                                <span
+                                                    className="badge bg-base-100 text-base-content border border-base-300 shadow-sm"
+                                                    style={{ minWidth: "80px", textAlign: "center" }}
+                                                >
+                                                    {r.subject}
+                                                </span>
                                             </td>
 
                                             {/* Study Mode */}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { NavLink, useParams } from "react-router";
 import {
     FaStar,
@@ -12,11 +12,16 @@ import {
 import { HashLoader } from "react-spinners";
 import useAxios from "../../hooks/axios/useAxios";
 import NoPartner from "../../components/NoPartner/NoPartner";
+import useAxiosSecure from "../../hooks/AxiosSecure/useAxiosSecure";
+import AuthContext from "../../contexts/Auth/AuthContext/AuthContext";
+import Swal from "sweetalert2";
 
 
 const PartnerDetails = () => {
+    const { user } = useContext(AuthContext);
     const [err, setErr] = useState("");
     const axiosInstance = useAxios();
+    const axiosSecure = useAxiosSecure();
     const { id } = useParams();
     // console.log(id);
 
@@ -32,7 +37,7 @@ const PartnerDetails = () => {
                 setPartner(result);
             } catch (error) {
                 // This will trigger on any non-2xx response or network error
-                console.error(error);
+                // console.error(error);
                 setErr("No Partner Found !!!");
             } finally {
                 setLoading(false);
@@ -41,9 +46,48 @@ const PartnerDetails = () => {
         fetchData();
 
     }, [axiosInstance, id])
+    // console.log(partner?.email);
+    // console.log(user?.email);
+    const onSendRequest = async (e) => {
+        e.preventDefault();
+        const {
+            _id, subject, studyMode, rating, profileimage, partnerCount,
+            name, location, experienceLevel, email, bio, availabilityTime
+        } = partner;
+        const InputData = {
+            partner_id: _id, subject, studyMode, rating, profileimage, partnerCount,
+            name, location, experienceLevel, bio, availabilityTime,
+            email: user?.email
+        };
+        console.log(InputData);
+        try {
+            const res = await axiosSecure.post("/partner/connect", InputData);
+            const payload = res?.data;
+            if (payload?.acknowledged && payload?.insertedId) {
+                await Swal.fire({
+                    title: "Partner Added Successfully !!",
+                    text: "Your study profile has been saved to MongoDB.",
+                    icon: "success",
+                    confirmButtonText: "OK",
+                });
+            } else {
+                await Swal.fire({
+                    icon: "error",
+                    title: "You already added this user !!!",
+                    text: "Find another partner !!! ",
+                });
+            }
+        } catch (err) {
+            console.log(err);
+        }
 
-    const onSendRequest = () => {
 
+        // console.log(inputData);
+        // try {
+        //     const res = await axiosSecure.post("/partner/connect", )
+        // }
+
+        // console.log("clicked")
     }
     // Helpers
     const safeImage = (url) =>
@@ -156,12 +200,11 @@ const PartnerDetails = () => {
                                 </span>
                             </div>
                         </div>
-
                         {/* Primary action */}
                         <div className="shrink-0">
                             <button
-                                className="btn btn-primary"
-                                onClick={() => onSendRequest?.(partner)}
+                                className="btn  btn-primary"
+                                onClick={onSendRequest}
                             >
                                 Send Partner Request
                             </button>
