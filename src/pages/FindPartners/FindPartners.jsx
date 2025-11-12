@@ -11,6 +11,7 @@ import useAxios from "../../hooks/axios/useAxios";
 import { HashLoader } from "react-spinners";
 import Swal from "sweetalert2";
 import NotFound from "../NotFound/NotFound";
+import NoPartner from "../../components/NoPartner/NoPartner";
 
 const FindPartners = () => {
     const [data, setData] = useState([]);
@@ -64,13 +65,13 @@ const FindPartners = () => {
     };
     if (loading) {
         return (
-            <div className="flex items-center justify-center min-h-[300px]">
+            <div className="flex items-center justify-center min-h-[600px]">
                 <HashLoader color="#73abff" size={80} />
             </div>
         );
     }
     else if (data.length == 0) {
-        return <NotFound></NotFound>;
+        return <NoPartner></NoPartner>;
     }
     else {
         return (

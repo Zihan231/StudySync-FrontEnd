@@ -31,51 +31,7 @@ const PartnerDetails = () => {
         };
         fetchData();
     }, [])
-    // ✨ New demo data (your structure)
-    // const demo = useMemo(
-    //     () => ({
-    //         _id: "demo-1",
-    //         name: "Sadia Rahman",
-    //         subject: "English",
-    //         studyMode: "Online", // Online | Offline
-    //         availabilityTime: "Evening 6-9 PM",
-    //         location: "Dhaka,Bangladesh",
-    //         experienceLevel: "Expert",
-    //         rating: 4,
-    //         partnerCount: 0,
-    //         email: "pubgzihan@gmail.com",
-    //         profileimage:
-    //             "https://c4.wallpaperflare.com/wallpaper/743/818/554/girl-image-1920x1200-wallpaper-preview.jpg",
-    //         bio:
-    //             "English major with a focus on spoken fluency and academic writing. I prefer online sessions with structured lesson plans and weekly practice tasks.",
-    //     }),
-    //     []
-    // );
-
-    // Load (demo if no loader provided)
-    // useEffect(() => {
-    //     let alive = true;
-    //     (async () => {
-    //         try {
-    //             setLoading(true);
-    //             setErr("");
-    //             if (loadPartnerById) {
-    //                 const p = await loadPartnerById(id);
-    //                 if (alive) setPartner(p);
-    //             } else {
-    //                 if (alive) setPartner(demo);
-    //             }
-    //         } catch (e) {
-    //             if (alive) setErr(e?.message || "Failed to load partner.");
-    //         } finally {
-    //             if (alive) setLoading(false);
-    //         }
-    //     })();
-    //     return () => {
-    //         alive = false;
-    //     };
-    // }, [id, loadPartnerById, demo]);
-
+   
     const onSendRequest = () => {
 
     }
@@ -123,7 +79,7 @@ const PartnerDetails = () => {
     // Loading
     if (loading) {
         return (
-            <main className="flex items-center justify-center min-h-[300px]">
+            <main className="flex items-center justify-center min-h-[500px]">
                 <HashLoader color="#73abff" size={80} />
             </main>
         );
