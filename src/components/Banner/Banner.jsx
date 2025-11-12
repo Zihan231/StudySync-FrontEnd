@@ -54,7 +54,7 @@ const Banner = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[300px]">
+      <div className="flex items-center justify-center min-h-[600px]">
         <HashLoader color="#73abff" size={80} />
       </div>
     );
