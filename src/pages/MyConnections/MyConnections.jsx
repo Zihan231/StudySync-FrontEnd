@@ -1,79 +1,41 @@
 // src/pages/Connections/MyConnections.jsx
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { NavLink } from "react-router";
 import { FaWifi, FaUserFriends, FaEdit, FaTrash } from "react-icons/fa";
+import useAxiosSecure from "../../hooks/AxiosSecure/useAxiosSecure";
+import AuthContext from "../../contexts/Auth/AuthContext/AuthContext";
+import { HashLoader } from "react-spinners";
+import Swal from "sweetalert2";
 
-/**
- * Optional props you can wire:
- * - loadConnections?: () => Promise<Array<Request>>
- * - onDelete?: (id: string) => Promise<void> | void
- * - onUpdate?: (id: string, payload: { subject: string; studyMode: "Online"|"Offline" }) => Promise<void> | void
- */
-const MyConnections = ({ loadConnections, onDelete, onUpdate }) => {
-    // Demo data (remove when wiring API)
-    const demo = useMemo(
-        () => [
-            {
-                _id: "r1",
-                partnerId: "p1",
-                name: "Sadia Rahman",
-                profileimage:
-                    "https://c4.wallpaperflare.com/wallpaper/743/818/554/girl-image-1920x1200-wallpaper-preview.jpg",
-                subject: "English",
-                studyMode: "Online",
-            },
-            {
-                _id: "r2",
-                partnerId: "p2",
-                name: "Zihan Last",
-                profileimage: "https://randomuser.me/api/portraits/men/12.jpg",
-                subject: "Mathematics",
-                studyMode: "Offline",
-            },
-            {
-                _id: "r3",
-                partnerId: "p3",
-                name: "Ayesha Karim",
-                profileimage: "https://randomuser.me/api/portraits/women/21.jpg",
-                subject: "Literature",
-                studyMode: "Online",
-            },
-        ],
+
+const MyConnections = () => {
+    const [selected, setSelected] = useState({});
+    const [updateID, setUpdateID] = useState(null);
+    const subjects = useMemo(
+        () => ["English", "Mathematics", "Physics", "Programming", "Chemistry", "Biology", "Economics"],
         []
     );
-
-    const [rows, setRows] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [err, setErr] = useState("");
-
-    // Update modal state
-    const [openEditId, setOpenEditId] = useState(null);
-    const [editSubject, setEditSubject] = useState("");
-    const [editMode, setEditMode] = useState("Online");
-
+    const [error, setError] = useState("");
+    const OpenModal = useRef();
+    const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const axiosSecure = useAxiosSecure();
+    const { user } = useContext(AuthContext);
     useEffect(() => {
-        let alive = true;
-        (async () => {
+        const fetchData = async () => {
             try {
                 setLoading(true);
-                setErr("");
-                if (loadConnections) {
-                    const res = await loadConnections();
-                    if (alive) setRows(res || []);
-                } else {
-                    // demo mode
-                    if (alive) setRows(demo);
-                }
-            } catch (e) {
-                if (alive) setErr(e?.message || "Failed to load connections.");
+                const res = await axiosSecure(`/partner/connected/${user?.email}`);
+                const result = res.data;
+                setData(result);
+            } catch (error) {
+                console.log(error);
             } finally {
-                if (alive) setLoading(false);
+                setLoading(false);
             }
-        })();
-        return () => {
-            alive = false;
         };
-    }, [loadConnections, demo]);
+        fetchData();
+    }, [axiosSecure, user]);
 
     const safeImg = (url) =>
         !url || url.includes("create-partner")
@@ -95,87 +57,119 @@ const MyConnections = ({ loadConnections, onDelete, onUpdate }) => {
             </span>
         );
     };
-
+    console.log(selected);
     // Handlers (you wire logic)
     const handleDelete = async (id) => {
         // Optional: confirm UI
         // if (!confirm("Delete this request?")) return;
-        try {
-            await onDelete?.(id);
-            setRows((prev) => prev.filter((r) => r._id !== id));
-        } catch (e) {
-            console.error(e);
-        }
-    };
 
-    const handleOpenEdit = (row) => {
-        setOpenEditId(row._id);
-        setEditSubject(row.subject || "");
-        setEditMode(row.studyMode || "Online");
     };
 
     const handleUpdate = async (e) => {
         e.preventDefault();
-        const id = openEditId;
-        const payload = { subject: editSubject.trim(), studyMode: editMode };
+        setError(""); // reset previous error
+
+        const form = e.target;
+        const name = form.name.value.trim();
+        const subject = form.subject.value.trim();
+        const studyMode = form.studyMode.value;
+        const profileImage = form.profileImage.value.trim();
+
+        // Validate Name
+        if (!name) {
+            setError("Name is required.");
+            return;
+        }
+        if (name.length < 2) {
+            setError("Name must be at least 2 characters.");
+            return;
+        }
+
+        // Validate Subject
+        if (!subject) {
+            setError("Subject is required.");
+            return;
+        }
+        if (!subjects.includes(subject)) {
+            setError("Please select a valid subject from the list.");
+            return;
+        }
+
+        // Validate Study Mode
+        const validModes = ["Online", "Offline"];
+        if (!studyMode || !validModes.includes(studyMode)) {
+            setError("Please select a valid study mode.");
+            return;
+        }
+        // Validate Picture URL (optional)
+        if (profileImage) {
+            try {
+                new URL(profileImage);
+            } catch {
+                setError("Picture URL is invalid.");
+                return;
+            }
+        }
+        const inputData = {
+            name, sub: subject, stdMode: studyMode, imgURL: profileImage
+        };
+        const input2 = { name, subject, studyMode, profileimage: profileImage, _id: updateID };
+        // console.log(inputData);
         try {
-            await onUpdate?.(id, payload);
-            setRows((prev) =>
-                prev.map((r) => (r._id === id ? { ...r, ...payload } : r))
+            const res = await axiosSecure.patch(`/partner/update/${updateID}`, inputData);
+            console.log(res);
+            const result = res.data;
+            // setData(data.filter(item => item._id != updateID))
+            // setData([data.filter(item => item._id != updateID), input2]);
+            setData(prev =>
+                prev.map(item => (item._id === updateID ? { ...item, ...input2 } : item))
             );
-            setOpenEditId(null);
-        } catch (e2) {
-            console.error(e2);
+            OpenModal.current.close();
+            // setData({...data, })
+            console.log(result);
+        } catch (error) {
+            console.log(error);
         }
     };
+
+    // console.log(updateID);
+
 
     // Loading state
     if (loading) {
         return (
-            <main className="min-h-[calc(100vh-4rem)] bg-base-100 px-4 py-10">
-                <div className="max-w-7xl mx-auto">
-                    <h1 className="text-2xl md:text-3xl font-extrabold mb-4">My Connections</h1>
-                    <div className="card bg-base-200/50 border border-base-300">
-                        <div className="card-body">
-                            <div className="skeleton h-8 w-40 mb-4" />
-                            <div className="overflow-x-auto">
-                                <div className="skeleton h-10 w-full mb-2" />
-                                <div className="skeleton h-10 w-full mb-2" />
-                                <div className="skeleton h-10 w-full" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </main>
+            <div className="flex items-center justify-center min-h-[600px]">
+                <HashLoader color="#73abff" size={80} />
+            </div>
         );
     }
 
     // Error state
-    if (err) {
-        return (
-            <main className="min-h-[calc(100vh-4rem)] bg-base-100 px-4 py-10">
-                <div className="max-w-7xl mx-auto">
-                    <h1 className="text-2xl md:text-3xl font-extrabold mb-4">My Connections</h1>
-                    <div className="alert alert-error">
-                        <span>{err}</span>
-                    </div>
-                </div>
-            </main>
-        );
-    }
+    // if (err) {
+    //     return (
+    //         <main className="min-h-[calc(100vh-4rem)] bg-base-100 px-4 py-10">
+    //             <div className="max-w-7xl mx-auto">
+    //                 <h1 className="text-2xl md:text-3xl font-extrabold mb-4">My Connections</h1>
+    //                 <div className="alert alert-error">
+    //                     <span>{err}</span>
+    //                 </div>
+    //             </div>
+    //         </main>
+    //     );
+    // }
 
     // Empty state
-    if (!rows.length) {
+    else if (data.length <= 0) {
         return (
             <main className="min-h-[calc(100vh-4rem)] bg-base-100 px-4 py-10">
                 <div className="max-w-4xl mx-auto text-center">
-                    <div className="mx-auto mb-4 grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-br from-primary/15 to-secondary/15 shadow-sm">
+                    <div className="mx-auto mb-4 grid h-14 w-14 place-items-center rounded-2xl bg-linear-to-br from-primary/15 to-secondary/15 shadow-sm">
                         <svg width="26" height="26" viewBox="0 0 24 24" className="opacity-80">
                             <path d="M10 18a8 8 0 1 1 5.292-14.03" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                             <path d="M21 21l-4.35-4.35" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                         </svg>
                     </div>
-                    <h2 className="text-xl md:text-2xl font-extrabold">No requests yet</h2>
+                    <h2 className="text-xl md:text-2xl font-extrabold">No Partners yet</h2>
                     <p className="mt-1 text-sm text-base-content/70">
                         When you send partner requests, they’ll show up here.
                     </p>
@@ -209,7 +203,7 @@ const MyConnections = ({ loadConnections, onDelete, onUpdate }) => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {rows.map((r) => (
+                                    {data.map((r) => (
                                         <tr key={r._id} className="hover">
                                             {/* Partner cell */}
                                             <td>
@@ -254,7 +248,17 @@ const MyConnections = ({ loadConnections, onDelete, onUpdate }) => {
                                                 <div className="inline-flex gap-2">
                                                     <button
                                                         className="btn btn-ghost btn-xs"
-                                                        onClick={() => handleOpenEdit(r)}
+                                                        onClick={() => {
+                                                            setUpdateID(r._id);
+                                                            const filtered = {
+                                                                name: r.name,
+                                                                subject: r.subject,
+                                                                studyMode: r.studyMode,
+                                                                image: r.profileimage
+                                                            }
+                                                            setSelected(filtered);
+                                                            OpenModal.current.showModal()
+                                                        }}
                                                         aria-label="Update request"
                                                         title="Update"
                                                     >
@@ -277,58 +281,107 @@ const MyConnections = ({ loadConnections, onDelete, onUpdate }) => {
                                 </tbody>
                             </table>
                         </div>
-
-                        {/* Footer (optional) */}
-                        {/* <div className="p-3 flex items-center justify-end gap-2">
-                            <span className="text-xs text-base-content/60">
-                                {rows.length} request{rows.length > 1 ? "s" : ""}
-                            </span>
-                        </div> */}
                     </div>
                 </div>
             </div>
 
-            {/* Update Modal */}
-            <dialog id="updateModal" className={`modal ${openEditId ? "modal-open" : ""}`}>
-                <div className="modal-box">
-                    <h3 className="font-bold text-lg">Update Request</h3>
-                    <form onSubmit={handleUpdate} className="mt-3 space-y-3">
-                        <label className="form-control">
-                            <span className="label-text">Subject</span>
+            {/* Modal */}
+            <dialog
+                ref={OpenModal}
+                onClick={(e) => {
+                    if (e.target === e.currentTarget) {
+                        OpenModal.current.close();
+                    }
+                }}
+                className="modal modal-bottom sm:modal-middle backdrop:bg-base-200/50 backdrop-blur-sm"
+            >
+                <div className="modal-box rounded-2xl bg-base-100 shadow-lg p-6">
+                    <h3 className="font-bold text-xl mb-4 text-center">Update Partner</h3>
+
+                    {/* Form */}
+                    <form onSubmit={handleUpdate} method="dialog" className="space-y-4">
+                        {/* Name */}
+                        <label className="form-control w-full">
+                            <span className="label-text">Name</span>
                             <input
+                                defaultValue={selected.name}
                                 type="text"
-                                value={editSubject}
-                                onChange={(e) => setEditSubject(e.target.value)}
-                                className="input input-bordered"
-                                placeholder="e.g., Mathematics"
-                                required
+                                name="name"
+                                placeholder="Full Name"
+                                className="input input-bordered w-full"
+                            />
+                        </label>
+                        {/* Subject */}
+                        <label className="form-control">
+                            <div className="label"><span className="label-text">Subject</span></div>
+                            <input
+                                defaultValue={selected.subject}
+                                name="subject"
+                                list="subject-list"
+                                placeholder="e.g., English, Math, Programming"
+                                className="input input-bordered w-full"
+                            />
+                            <datalist id="subject-list">
+                                {subjects.map((s) => (
+                                    <option key={s} value={s} />
+                                ))}
+                            </datalist>
+                        </label>
+
+                        {/* Study Mode */}
+                        <label className="form-control w-full">
+                            <span className="label-text">Study Mode</span>
+                            <select
+                                name="studyMode"
+                                className="select select-bordered w-full"
+                                value={selected?.studyMode || ""} // controlled
+                                onChange={(e) =>
+                                    setSelected((prev) => ({ ...prev, studyMode: e.target.value }))
+                                }
+                            >
+                                <option value="" disabled>
+                                    Select mode
+                                </option>
+                                <option value="Online">Online</option>
+                                <option value="Offline">Offline</option>
+                            </select>
+
+                        </label>
+
+                        {/* Picture URL */}
+                        <label className="form-control w-full">
+                            <span className="label-text">Picture URL</span>
+                            <input
+                                defaultValue={selected?.image}
+                                name="profileImage"
+                                placeholder="https://example.com/photo.jpg"
+                                className="input input-bordered w-full"
                             />
                         </label>
 
-                        <label className="form-control">
-                            <span className="label-text">Study Mode</span>
-                            <select
-                                value={editMode}
-                                onChange={(e) => setEditMode(e.target.value)}
-                                className="select select-bordered"
-                                required
-                            >
-                                <option>Online</option>
-                                <option>Offline</option>
-                            </select>
-                        </label>
-                        <div className="modal-action">
-                            <button type="button" className="btn btn-ghost" onClick={() => setOpenEditId(null)}>
-                                Cancel
+                        {/* Actions */}
+                        <div className="modal-action flex justify-end gap-2 mt-4">
+                            {/* Close button */}
+                            <button type="reset" className="btn btn-ghost">
+                                Reset
                             </button>
-                            <button type="submit" className="btn btn-primary">Save changes</button>
+                            <button
+                                type="submit"
+                                className="btn btn-primary"
+                            >
+                                Save
+                            </button>
                         </div>
+                        {/* Actions */}
+                        {error && (
+                            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded-md text-sm">
+                                {error}
+                            </div>
+                        )}
                     </form>
                 </div>
-                <form method="dialog" className="modal-backdrop" onClick={() => setOpenEditId(null)}>
-                    <button>close</button>
-                </form>
             </dialog>
+
         </main>
     );
 };

@@ -126,8 +126,8 @@ const TopPartners = () => {
                                 >
                                     <div className="p-6 sm:p-5 md:p-6 flex flex-col sm:flex-row gap-5 items-center sm:items-stretch">
                                         {/* Avatar (left) */}
-                                        <div className="relative flex-shrink-0">
-                                            <div className="absolute -inset-2 bg-gradient-to-tr from-primary/30 via-secondary/20 to-accent/10 rounded-full blur-md opacity-70 transition duration-500 group-hover:opacity-90" />
+                                        <div className="relative shrink-0">
+                                            <div className="absolute -inset-2 bg-linear-to-tr from-primary/30 via-secondary/20 to-accent/10 rounded-full blur-md opacity-70 transition duration-500 group-hover:opacity-90" />
                                             <div className="avatar relative">
                                                 <div className="w-24 sm:w-28 rounded-full ring ring-primary/30 ring-offset-2 ring-offset-base-100 overflow-hidden">
                                                     <img
