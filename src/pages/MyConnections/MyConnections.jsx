@@ -146,10 +146,19 @@ const MyConnections = () => {
             setData(prev =>
                 prev.map(item => (item._id === updateID ? { ...item, ...input2 } : item))
             );
+            Swal.fire({
+                title: "Profile Updated Successfully !",
+                icon: "success",
+                draggable: true
+            });
             OpenModal.current.close();
-            // setData({...data, })
-            console.log(result);
         } catch (error) {
+            Swal.fire({
+                title: "Failed !!!",
+                icon: "error",
+                draggable: true
+            });
+            OpenModal.current.close();
             console.log(error);
         }
     };
