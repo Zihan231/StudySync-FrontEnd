@@ -37,8 +37,8 @@ const NoPartner = ({
 
       {/* Actions */}
       <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-        <NavLink to="/partners" className="btn btn-outline btn-sm">
-          Back to List
+        <NavLink to="/" className="btn btn-outline btn-sm">
+          Back to Home
         </NavLink>
         <NavLink to={ctaTo} className="btn btn-primary btn-sm">
           Create Partner Profile
