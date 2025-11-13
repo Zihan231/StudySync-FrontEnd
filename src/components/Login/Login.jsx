@@ -26,6 +26,11 @@ const Login = () => {
                 }).then(navigate(reDirectTo, { replace: true }));
             })
             .catch(() => {
+                Swal.fire({
+                    title: "Login Failed !!!",
+                    icon: "error",
+                    draggable: true
+                })
                 SetError("Invalid Email or Password");
             }).finally(() => {
                 // SetIsLogin(false);
@@ -45,7 +50,12 @@ const Login = () => {
                 SetUser?.(result.user);
             })
             .catch((err) => {
-                setSubmitError(err?.message || "Google sign-in failed.");
+                Swal.fire({
+                    title: "Login Failed !!!",
+                    icon: "error",
+                    draggable: true
+                })
+                setSubmitError("Google sign-in failed.");
             });
     }
     return (

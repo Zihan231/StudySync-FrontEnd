@@ -41,7 +41,6 @@ const Register = () => {
     createUser(email, password)
       .then((result) => {
         const receivedUser = result.user;
-
         return updateProfile(receivedUser, {
           displayName: name,
           photoURL: imgUrl,
@@ -51,11 +50,15 @@ const Register = () => {
             title: "Account created successfully !",
             icon: "success",
             draggable: true
-          }).then(navigate(reDirectTo, { replace: true }));          
+          }).then(navigate(reDirectTo, { replace: true }));
         });
       })
       .catch((err) => {
-        console.error("❌ Firebase createUser error:", err);
+        Swal.fire({
+          title: "Login Failed !!!",
+          icon: "error",
+          draggable: true
+        })
         setSubmitError("Something went wrong !!!");
       });
   };
@@ -74,7 +77,12 @@ const Register = () => {
         SetUser?.(result.user);
       })
       .catch((err) => {
-        setSubmitError(err?.message || "Google sign-in failed.");
+        Swal.fire({
+          title: "Login Failed !!!",
+          icon: "error",
+          draggable: true
+        })
+        setSubmitError("Google sign-in failed.");
       });
   };
 
