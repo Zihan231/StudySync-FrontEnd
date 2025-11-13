@@ -66,7 +66,7 @@ const TopPartners = () => {
         const fetchData = async () => {
             try {
                 setLoading(true);
-                const res = await axiosInstance.get("/partners/recent");
+                const res = await axiosInstance.get("/topPartners");
                 const result = await res.data;
                 setPartners(result);
             } catch (error) {

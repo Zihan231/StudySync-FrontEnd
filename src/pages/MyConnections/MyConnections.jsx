@@ -59,16 +59,33 @@ const MyConnections = () => {
     };
     // Handlers (you wire logic)
     const handleDelete = async (id) => {
-        try {
-            const res = await axiosSecure.delete(`/partner/delete/${id}`);
-            const result = res.data;
-            if (result.acknowledged && result.deletedCount == 1) {
-                setData(data.filter(item => item._id != id));
+        const result = await Swal.fire({
+            title: "Do you want to delete?",
+            showDenyButton: true,
+            confirmButtonText: "Delete",
+            denyButtonText: `Cancel`,
+        });
+
+        if (result.isConfirmed) {
+            try {
+                const res = await axiosSecure.delete(`/partner/delete/${id}`);
+                const r = res.data;
+
+                if (r.acknowledged && r.deletedCount === 1) {
+                    setData(prev => prev.filter(item => item._id !== id));
+                    Swal.fire("Deleted!", "", "success");
+                }
+            } catch (err) {
+                Swal.fire("Something Went Wrong. Please try again...", "", "info");
+
+                console.log(err);
             }
-        } catch (err) {
-            console.log(err);
+
+        } else if (result.isDenied) {
+            Swal.fire("Action Canceled !!!", "", "info");
         }
     };
+
 
     const handleUpdate = async (e) => {
         e.preventDefault();
@@ -220,7 +237,7 @@ const MyConnections = () => {
                                                     </div>
                                                     <div className="min-w-0">
                                                         <NavLink
-                                                            to={`/partners/${r.partnerId || r._id}`}
+                                                            to={`/partners/${r.partner_id}`}
                                                             className="font-semibold hover:text-primary truncate block"
                                                             title={r.name}
                                                         >
