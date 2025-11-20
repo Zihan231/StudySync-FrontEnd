@@ -12,11 +12,9 @@ Built with **React (Vite)** and **Tailwind CSS** on the frontend, **Firebase Aut
 
 - [About](#-about)
 - [Features](#-features)
-- [Tech Stack](#-tech-stack)
+- [Tech Stack](#%EF%B8%8F-tech-stack)
 - [Screenshots](#-screenshots)
 - [Installation](#-Installation)
-- [Folder Structure](#-folder-structure)
-- [Contributing](#-contributing)
 - [Contact](#-contact)
 
 
