@@ -105,15 +105,11 @@ const Contact = () => {
                 <div className="divider text-xs">Quick links</div>
 
                 <div className="flex flex-wrap gap-2">
-                  <NavLink to="/how-it-works" className="btn btn-ghost btn-sm">
-                    How it works
-                  </NavLink>
+                  
                   <NavLink to="/about" className="btn btn-ghost btn-sm">
                     About
                   </NavLink>
-                  <a href="/about#faq" className="btn btn-ghost btn-sm">
-                    FAQ
-                  </a>
+                  
                 </div>
 
                 <p className="mt-3 text-xs text-base-content/60">
@@ -183,13 +179,11 @@ const Contact = () => {
                       className="textarea textarea-bordered w-full"
                     />
                   </label>
-
                   <button type="submit" className="btn btn-primary w-full" disabled={isSending}>
                     {isSending && <span className="loading loading-spinner loading-sm" />}
                     <span className={isSending ? "ml-2" : ""}>Send message</span>
                   </button>
                 </form>
-
                 <p className="mt-4 text-center text-xs text-base-content/60">
                   By sending this message, you agree to our{" "}
                   <span className="font-semibold">Terms</span> and{" "}
@@ -198,16 +192,7 @@ const Contact = () => {
               </div>
             </div>
           </div>
-        </div>
-
-        {/* Optional footer helper */}
-        <p className="mt-4 text-center text-xs text-base-content/60">
-          Prefer self-service? Check{" "}
-          <a href="/about#faq" className="link link-primary font-semibold">
-            FAQ
-          </a>{" "}
-          first.
-        </p>
+        </div>        
       </div>
     </main>
   );

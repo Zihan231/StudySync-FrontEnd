@@ -175,9 +175,7 @@ const Banner = () => {
 
                     {/* Availability chips */}
                     <div className="mt-3 flex flex-wrap gap-2">
-                      <div className="badge badge-outline">
-                        {s.availableFrom} – {s.availableTo}
-                      </div>
+                      
                       <div className="badge badge-outline">{s.studyMode}</div>
                       <div className="badge badge-outline">{s.location}</div>
                     </div>

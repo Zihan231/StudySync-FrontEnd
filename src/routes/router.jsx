@@ -14,6 +14,8 @@ import About from "../pages/About/About";
 import Contact from "../pages/Contact/Contact";
 import Dashboard from "../pages/Dashboard/Dashboard";
 import DashboardProfile from "../components/DashboardProfile/DashboardProfile";
+import DashboardCreateProfile from "../pages/DashboardCreateProfile/DashboardCreateProfile";
+import DashboardConnections from "../pages/DashboardConnections/DashboardConnections";
 
 const router = createBrowserRouter([
     {
@@ -76,6 +78,14 @@ const router = createBrowserRouter([
             {
                 index: true,
                 Component: DashboardProfile
+            },
+            {
+                path: "createPartner",
+                Component: DashboardCreateProfile
+            },
+            {
+                path: "connections",
+                Component: DashboardConnections 
             }
         ]
     },

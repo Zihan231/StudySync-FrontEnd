@@ -102,8 +102,8 @@ const DashboardProfile = () => {
             <NavLink to="/" className="btn btn-ghost">
               Home
             </NavLink>
-            <NavLink to="/create-partner" className="btn btn-primary">
-              Create / Update Profile
+            <NavLink to="/dashboard/createPartner" className="btn btn-primary">
+              Create Profile
             </NavLink>
           </div>
         </div>

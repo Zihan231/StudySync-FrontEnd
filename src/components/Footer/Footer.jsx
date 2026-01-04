@@ -51,6 +51,9 @@ const Footer = () => {
                             <NavLink to="/about" className="hover:text-primary">
                                 About
                             </NavLink>
+                            <NavLink to="/contact" className="hover:text-primary">
+                                Contact
+                            </NavLink>
                         </nav>
                     </div>
 

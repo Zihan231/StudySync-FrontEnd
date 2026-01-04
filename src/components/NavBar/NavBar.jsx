@@ -28,8 +28,8 @@ const NavBar = () => {
           { to: "/partners", label: "Find Partners" },
           { to: "/about", label: "About" },
           { to: "/contact", label: "Contact" },
-          { to: "/create-partner", label: "Create Partner Profile" },
-          { to: "/connections", label: "My Connections" },
+          // { to: "/create-partner", label: "Create Partner Profile" },
+          // { to: "/connections", label: "My Connections" },
         ]
         : [
           { to: "/", label: "Home" },
@@ -106,12 +106,6 @@ const NavBar = () => {
                 className="menu menu-sm dropdown-content bg-base-100 rounded-box z-60 mt-3 w-56 p-2 shadow-xl border border-base-300/60"
               >
                 <li>
-                  <NavLink
-                    to="/profile"
-                    className="rounded-md px-2 text-sm py-2 hover:bg-base-300/60 transition font-bold"
-                  >
-                    Profile
-                  </NavLink>
                   <NavLink
                     to="dashboard"
                     className="rounded-md px-2 text-sm py-2 hover:bg-base-300/60 transition font-bold"
