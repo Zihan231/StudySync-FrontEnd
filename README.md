@@ -1,10 +1,10 @@
-# 🎓 StudyMate — Find Your Perfect Study Partner
+# 🎓 StudySync — Find Your Perfect Study Partner
 
-StudyMate is a modern, responsive web application designed to help learners connect, collaborate, and find the right study partners based on interests, skills, and learning goals.  
+StudySync is a modern, responsive web application designed to help learners connect, collaborate, and find the right study partners based on interests, skills, and learning goals.  
 Built with **React (Vite)** and **Tailwind CSS** on the frontend, **Firebase Authentication + Hosting**, and an **Express + MongoDB** backend API.
 
 🌐 **Live Website:** https://study-mate-c175a.web.app/  
-📁 **Frontend Repo:** https://github.com/Zihan231/StudyMate-FrontEnd  
+📁 **Frontend Repo:** https://github.com/Zihan231/StudySync-BackEnd.git 
 
 ---
 
@@ -20,7 +20,7 @@ Built with **React (Vite)** and **Tailwind CSS** on the frontend, **Firebase Aut
 
 ## 🧩 About
 
-**StudyMate** helps learners discover the right study partners based on shared subjects, skill levels, and study preferences.
+**StudySync** helps learners discover the right study partners based on shared subjects, skill levels, and study preferences.
 
 The project focuses on:
 
@@ -61,7 +61,7 @@ The project focuses on:
 
 ### ⚙ Backend
 
-> ### Git Link: https://github.com/Zihan231/StudyMate-BackEnd
+> ### Git Link: https://github.com/Zihan231/StudySync-BackEnd
 
 - **Express.js (Node.js)**
 - **MongoDB**
@@ -92,8 +92,8 @@ The project focuses on:
 
 ### 1️⃣ Clone the repository
 ```bash
-git clone https://github.com/Zihan231/StudyMate-FrontEnd.git
-cd StudyMate-FrontEnd
+git clone https://github.com/Zihan231/StudySync-FrontEnd.git
+cd StudySync-FrontEnd
 ```
 ### 2️⃣ Install dependencies
 ```bash
@@ -128,7 +128,7 @@ npm run preview
 </p>
 
 <p align="center">
-  <b>StudyMate</b> was created with ❤️ by <a href="https://github.com/Zihan231">Zihan231</a>
+  <b>StudySync</b> was created with ❤️ by <a href="https://github.com/Zihan231">Zihan231</a>
 </p>
 
 <p align="center">

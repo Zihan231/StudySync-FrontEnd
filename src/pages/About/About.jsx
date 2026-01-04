@@ -166,11 +166,8 @@ const About = () => {
                   </div>
 
                   <div className="mt-4 flex flex-wrap gap-2">
-                    <NavLink to="/how-it-works" className="btn btn-primary btn-sm md:btn-md">
-                      See How It Works
-                    </NavLink>
-                    <NavLink to="/contact" className="btn btn-ghost btn-sm md:btn-md">
-                      Contact
+                    <NavLink to="/contact" className="btn btn-primary btn-sm md:btn-md">
+                      Contact Us
                     </NavLink>
                   </div>
                 </div>
