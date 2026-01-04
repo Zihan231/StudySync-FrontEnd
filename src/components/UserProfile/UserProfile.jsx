@@ -15,7 +15,7 @@ const UserProfile = () => {
                         SM
                     </div>
                     <h1 className="text-2xl md:text-3xl font-extrabold">User Profile</h1>
-                    <p className="mt-1 text-base-content/70">Your StudyMate identity</p>
+                    <p className="mt-1 text-base-content/70">Your StudySync identity</p>
                 </div>
 
                 {/* Card */}

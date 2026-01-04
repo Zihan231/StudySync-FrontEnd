@@ -10,6 +10,7 @@ import FindPartners from "../pages/FindPartners/FindPartners";
 import PartnerDetails from "../pages/PartnerDetails/PartnerDetails";
 import MyConnections from "../pages/MyConnections/MyConnections";
 import PrivateRoute from "./privateRoute/PrivateRoute";
+import About from "../pages/About/About";
 
 const router = createBrowserRouter([
     {
@@ -46,16 +47,21 @@ const router = createBrowserRouter([
             },
             {
                 path: '/partners/:id',
-                element: <PrivateRoute>
-                    <PartnerDetails></PartnerDetails>
-                </PrivateRoute>
+                element: <PartnerDetails></PartnerDetails>
             },
             {
                 path: "/connections",
                 element: <PrivateRoute>
                     <MyConnections></MyConnections>
                 </PrivateRoute>
-            }
+            },
+            {
+                path: "/about",
+                Component: About
+            },
+            // {
+            //     path:
+            // }
         ]
     },
     {

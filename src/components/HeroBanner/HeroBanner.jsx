@@ -40,7 +40,7 @@ const slides = [
 const HeroBanner = () => {
     return (
         <section className="relative bg-base-100">
-            <div className="max-w-7xl mx-auto px-4 py-4">
+            <div className="max-w-7xl mx-auto py-4">
                 <Swiper
                     modules={[Navigation, Pagination, Autoplay, A11y]}
                     slidesPerView={1}

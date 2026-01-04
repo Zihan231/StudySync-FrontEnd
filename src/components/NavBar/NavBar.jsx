@@ -2,6 +2,7 @@ import React, { use, useContext, useMemo } from "react";
 import { NavLink } from "react-router";
 import ThemeContext from "../../contexts/Theme/themeContext";
 import AuthContext from "../../contexts/Auth/AuthContext/AuthContext";
+import { FaBookOpen } from "react-icons/fa";
 
 /** Active link styles */
 const linkClasses = ({ isActive }) =>
@@ -31,23 +32,30 @@ const NavBar = () => {
         : [
           { to: "/", label: "Home" },
           { to: "/partners", label: "Find Partners" },
+          { to: "/about", label: "About" },
         ],
     [user]
   );
 
   return (
     <header className="sticky top-0 z-50">
-      <div className="navbar bg-base-100/90 backdrop-blur shadow-sm border-b border-base-300 px-6 md:px-32">
+      <div className="border navbar bg-base-100/90 backdrop-blur shadow-sm border-b border-base-300 px-4 md:px-30">
         {/* Left: Brand */}
         <div className="flex-1">
-          <NavLink to="/" className="btn btn-ghost px-2">
+          <NavLink to="/" className="btn btn-ghost px-0">
             <div className="flex items-center gap-2">
-              <div className="w-9 h-9 rounded-xl grid place-items-center font-bold text-primary-content bg-linear-to-br from-primary to-secondary shadow">
-                SM
+              <div className="w-10 h-10 rounded-2xl grid place-items-center text-primary-content bg-gradient-to-br from-primary to-secondary shadow-sm ring-1 ring-base-300">
+                <FaBookOpen className="w-5 h-5" />
               </div>
-              <span className="text-lg md:text-xl font-extrabold tracking-tight">
-                Study<span className="text-secondary">Mate</span>
-              </span>
+
+              <div className="flex flex-col leading-none">
+                <span className="text-lg md:text-xl font-extrabold tracking-tight">
+                  Study<span className="text-secondary">Sync</span>
+                </span>
+                <span className="text-[11px] md:text-xs text-base-content/60">
+                  Find • Match • Study
+                </span>
+              </div>
             </div>
           </NavLink>
         </div>

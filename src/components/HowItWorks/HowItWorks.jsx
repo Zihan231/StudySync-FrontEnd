@@ -3,11 +3,7 @@ import React from "react";
 import { NavLink } from "react-router"; // per your preference
 import { FaUserGraduate, FaSearch, FaCalendarAlt, FaComments, FaStar, FaLock, FaBolt } from "react-icons/fa";
 
-/**
- * StudyMate — How It Works (using react-icons)
- * - Clean, responsive page explaining the flow in 4 steps
- * - Uses Tailwind + DaisyUI and your StudyMate theme
- */
+
 const HowItWorks = () => {
   const steps = [
     {
@@ -38,7 +34,7 @@ const HowItWorks = () => {
 
   const faqs = [
     {
-      q: "Is StudyMate free?",
+      q: "Is StudySync free?",
       a: "Creating a profile and browsing partners is free. Some advanced features may be paid in the future.",
     },
     { q: "How are matches ranked?", a: "We prioritize subject match, experience level, availability overlap, and location/mode preference." },
@@ -50,15 +46,15 @@ const HowItWorks = () => {
     <main className="bg-base-100">
       {/* Hero */}
       <section className="relative">
-        <div className="max-w-7xl mx-auto px-4 md:px-6 pt-10 md:pt-14 pb-10">
+        <div className=" max-w-7xl mx-auto px-4 md:px-0 pt-10 md:pt-14 pb-10">
           <div className="flex flex-col md:flex-row items-start md:items-center gap-6 md:gap-10">
             <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 mb-3">
-                <span className="badge badge-accent badge-outline">StudyMate</span>
+              <div id="how-it-works" className="flex items-center gap-2 mb-3">
+                <span className="badge badge-accent badge-outline">StudySync</span>
                 <span className="text-xs opacity-70">Find the right partner. Learn faster.</span>
               </div>
               <h1 className="text-3xl md:text-5xl font-extrabold leading-tight">
-                How StudyMate Works
+                How StudySync Works
               </h1>
               <p className="mt-3 text-base md:text-lg text-base-content/80 max-w-2xl">
                 A simple flow to get you learning with the right people—without the hassle. Create your profile, find a match, and start studying.
@@ -95,7 +91,7 @@ const HowItWorks = () => {
 
       {/* Steps */}
       <section className="py-8 md:py-12">
-        <div className="max-w-7xl mx-auto px-4 md:px-6">
+        <div className="max-w-7xl mx-auto px-4 md:px-0">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             {steps.map((s) => (
               <div key={s.id} className="group rounded-2xl border border-base-300 bg-base-100 hover:shadow-xl transition-shadow p-5">
@@ -111,8 +107,8 @@ const HowItWorks = () => {
       </section>
 
       {/* Mini walkthrough */}
-      {/* <section className="pb-10 md:pb-16">
-        <div className="max-w-7xl mx-auto px-4 md:px-6">
+      <section className="pb-10 md:pb-16">
+        <div className="max-w-7xl mx-auto px-4 md:px-0">
           <div className="grid md:grid-cols-2 gap-6 md:gap-10 items-stretch">
             <div className="rounded-2xl border border-base-300 bg-base-100 shadow-lg p-5 md:p-6">
               <div className="badge badge-outline mb-3">Smart matching</div>
@@ -145,11 +141,11 @@ const HowItWorks = () => {
             </div>
           </div>
         </div>
-      </section> */}
+      </section>
 
       {/* FAQ */}
       <section className="pb-12 md:pb-20">
-        <div className="max-w-5xl mx-auto px-4 md:px-6">
+        <div id="faq" className="max-w-5xl mx-auto px-4 md:px-6">
           <h2 className="text-2xl md:text-3xl font-extrabold text-center">Frequently asked questions</h2>
           <div className="mt-6 md:mt-8 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
             {faqs.map((f, i) => (

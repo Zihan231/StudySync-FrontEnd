@@ -53,7 +53,7 @@ const Login = () => {
                 }).then(navigate(reDirectTo, { replace: true }));
                 SetUser?.(result.user);
             })
-            .catch((err) => {
+            .catch(() => {
                 Swal.fire({
                     title: "Login Failed !!!",
                     icon: "error",
@@ -71,7 +71,7 @@ const Login = () => {
                         SM
                     </div>
                     <h1 className="text-2xl md:text-3xl font-extrabold">Welcome back</h1>
-                    <p className="mt-1 text-base-content/70">Login to continue to StudyMate</p>
+                    <p className="mt-1 text-base-content/70">Login to continue to StudySync</p>
                 </div>
 
                 {/* Card */}

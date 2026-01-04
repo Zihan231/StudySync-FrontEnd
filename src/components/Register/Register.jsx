@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router";
 import AuthContext from "../../contexts/Auth/AuthContext/AuthContext";
-import { updateProfile } from "firebase/auth"; // ✅ use your own Update() helper if you prefer
+import { updateProfile } from "firebase/auth";
 import Swal from "sweetalert2";
 
 const Register = () => {
@@ -56,7 +56,7 @@ const Register = () => {
           }).then(navigate(reDirectTo, { replace: true }));
         });
       })
-      .catch((err) => {
+      .catch(() => {
         Swal.fire({
           title: "Sign Up Failed !!!",
           icon: "error",
@@ -79,7 +79,7 @@ const Register = () => {
         }).then(navigate(reDirectTo, { replace: true }));
         SetUser?.(result.user);
       })
-      .catch((err) => {
+      .catch(() => {
         Swal.fire({
           title: "Sign Up Failed !!!",
           icon: "error",
@@ -99,7 +99,7 @@ const Register = () => {
             SM
           </div>
           <h1 className="text-2xl md:text-3xl font-extrabold">Create your account</h1>
-          <p className="mt-1 text-base-content/70">Join StudyMate and find your perfect study partners.</p>
+          <p className="mt-1 text-base-content/70">Join StudySync and find your perfect study partners.</p>
         </div>
 
         {/* Card */}

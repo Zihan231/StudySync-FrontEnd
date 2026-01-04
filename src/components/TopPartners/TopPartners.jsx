@@ -11,57 +11,6 @@ const TopPartners = () => {
     const [partners, setPartners] = useState([]);
     const [error, setError] = useState(false);
     const [loading, setLoading] = useState(false);
-    // const partners = [
-    //     {
-    //         _id: "1",
-    //         name: "Sadia Rahman",
-    //         profileimage:
-    //             "https://c4.wallpaperflare.com/wallpaper/743/818/554/girl-image-1920x1200-wallpaper-preview.jpg",
-    //         subject: "English",
-    //         email: "sadia.rahman@studymate.com",
-    //         rating: 4,
-    //     },
-    //     {
-    //         _id: "2",
-    //         name: "Zihan Last",
-    //         profileimage: "https://randomuser.me/api/portraits/men/12.jpg",
-    //         subject: "Mathematics",
-    //         email: "zihan.last@studymate.com",
-    //         rating: 5,
-    //     },
-    //     {
-    //         _id: "3",
-    //         name: "Ayesha Karim",
-    //         profileimage: "https://randomuser.me/api/portraits/women/21.jpg",
-    //         subject: "Literature",
-    //         email: "ayesha.karim@studymate.com",
-    //         rating: 4.5,
-    //     },
-    //     {
-    //         _id: "4",
-    //         name: "Tanvir Rahman",
-    //         profileimage: "https://randomuser.me/api/portraits/men/32.jpg",
-    //         subject: "Physics",
-    //         email: "tanvir.rahman@studymate.com",
-    //         rating: 4.2,
-    //     },
-    //     {
-    //         _id: "5",
-    //         name: "Mehnaz Islam",
-    //         profileimage: "https://randomuser.me/api/portraits/women/44.jpg",
-    //         subject: "Chemistry",
-    //         email: "mehnaz.islam@studymate.com",
-    //         rating: 4.8,
-    //     },
-    //     {
-    //         _id: "6",
-    //         name: "Arif Chowdhury",
-    //         profileimage: "https://randomuser.me/api/portraits/men/45.jpg",
-    //         subject: "Programming",
-    //         email: "arif.chowdhury@studymate.com",
-    //         rating: 5,
-    //     },
-    // ];
     useEffect(() => {
         const fetchData = async () => {
             try {

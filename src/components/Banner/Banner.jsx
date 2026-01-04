@@ -92,7 +92,7 @@ const Banner = () => {
 
   return (
     <section className="relative bg-base-100">
-      <div className="max-w-7xl mx-auto px-3 sm:px-4 pt-4 sm:pt-6 pb-6 sm:pb-10">
+      <div className="max-w-7xl mx-auto px-3 sm:px-0 pt-4 sm:pt-6 pb-6 sm:pb-10">
         <Swiper
           modules={[Navigation, Pagination, A11y, Autoplay]}
           // Behavior

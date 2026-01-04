@@ -7,7 +7,7 @@ const Testimonials = () => {
       id: 1,
       name: "Ayesha Karim",
       subject: "Physics",
-      text: "StudyMate helped me find a study partner who matches my schedule and learning pace. We’ve improved our grades together!",
+      text: "StudySync helped me find a study partner who matches my schedule and learning pace. We’ve improved our grades together!",
       image: "https://randomuser.me/api/portraits/women/21.jpg",
       rating: 5,
     },
@@ -30,19 +30,19 @@ const Testimonials = () => {
   ];
 
   return (
-    <main className="min-h-[calc(100vh-4rem)] bg-base-100 py-16 px-4 flex flex-col items-center">
+    <main className=" bg-base-100 py-16 px-4 flex flex-col items-center ">
       {/* Header */}
       <div className="text-center max-w-2xl mb-10">
         <h1 className="text-3xl md:text-4xl font-extrabold mb-2">
-          What Students Say
+          What Our Users Say
         </h1>
         <p className="text-base-content/70 text-sm md:text-base">
-          Real stories from StudyMate learners who’ve found their perfect study partners.
+          Real stories from StudySync learners who’ve found their perfect study partners.
         </p>
       </div>
 
       {/* Testimonials Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl w-full">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl w-full">
         {reviews.map((r) => (
           <div
             key={r.id}
@@ -83,15 +83,15 @@ const Testimonials = () => {
       </div>
 
       {/* CTA Section */}
-      <div className="mt-16 text-center">
+      {/* <div className="mt-16 text-center">
         <h2 className="text-xl md:text-2xl font-semibold mb-3">
           Share Your Experience
         </h2>
         <p className="text-base-content/70 mb-5 max-w-md mx-auto text-sm md:text-base">
-          Already used StudyMate? Help others by sharing your review.
+          Already used StudySync? Help others by sharing your review.
         </p>
         <button className="btn btn-primary">Write a Review</button>
-      </div>
+      </div> */}
     </main>
   );
 };
