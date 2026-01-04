@@ -11,6 +11,7 @@ import PartnerDetails from "../pages/PartnerDetails/PartnerDetails";
 import MyConnections from "../pages/MyConnections/MyConnections";
 import PrivateRoute from "./privateRoute/PrivateRoute";
 import About from "../pages/About/About";
+import Contact from "../pages/Contact/Contact";
 
 const router = createBrowserRouter([
     {
@@ -59,9 +60,10 @@ const router = createBrowserRouter([
                 path: "/about",
                 Component: About
             },
-            // {
-            //     path:
-            // }
+            {
+                path: "/contact",
+                Component: Contact
+            }
         ]
     },
     {

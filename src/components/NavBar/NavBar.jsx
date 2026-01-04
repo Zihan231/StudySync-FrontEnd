@@ -26,6 +26,8 @@ const NavBar = () => {
         ? [
           { to: "/", label: "Home" },
           { to: "/partners", label: "Find Partners" },
+          { to: "/about", label: "About" },
+          { to: "/contact", label: "Contact" },
           { to: "/create-partner", label: "Create Partner Profile" },
           { to: "/connections", label: "My Connections" },
         ]
@@ -33,6 +35,7 @@ const NavBar = () => {
           { to: "/", label: "Home" },
           { to: "/partners", label: "Find Partners" },
           { to: "/about", label: "About" },
+          { to: "/contact", label: "Contact" },
         ],
     [user]
   );
